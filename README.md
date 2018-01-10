@@ -358,9 +358,9 @@ events {
 
 stream {
   upstream apiservers {
-    server 172.31.12.181:8080;
-    server 172.31.9.173:8080;
-    server 172.31.9.151:8080;
+    server 10.0.0.1:8080;
+    server 10.0.0.2:8080;
+    server 10.0.0.3:8080;
   }
 
   server {
@@ -792,36 +792,17 @@ Expose the `nginx` deployment using a [NodePort](https://kubernetes.io/docs/conc
 kubectl expose deployment nginx --port 80 --type NodePort
 ```
 
-Retrieve the node port assigned to the `nginx` service:
+Retrieve the service ip assigned to the `nginx` service:
 
 ```
-NODE_PORT=$(kubectl get svc nginx \
-  --output=jsonpath='{range .spec.ports[0]}{.nodePort}')
+kubectl get svc nginx
 ```
 
-Retrieve the external IP address of a worker instance:
+Make an HTTP request using the svc IP address and the `nginx` from the busybox pod:
 
 ```
-```
-
-Make an HTTP request using the external IP address and the `nginx` node port:
-
-```
-curl -I http://${EXTERNAL_IP}:${NODE_PORT}
+kubectl exec -ti $BUSYBOX_POD_NAME -- wget http://$SVC_IP
 ```
 
 > output
-
-```
-HTTP/1.1 200 OK
-Server: nginx/1.13.7
-Date: Mon, 18 Dec 2017 14:52:09 GMT
-Content-Type: text/html
-Content-Length: 612
-Last-Modified: Tue, 21 Nov 2017 14:28:04 GMT
-Connection: keep-alive
-ETag: "5a1437f4-264"
-Accept-Ranges: bytes
-```
----
 
