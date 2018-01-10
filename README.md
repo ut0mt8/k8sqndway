@@ -1,6 +1,6 @@
 # Kubernetes The Quick and Dirty Way
 
-This tutorial is a derivative of Kubernetes the hard way from the excellent Kelsey Hightower. This is pretty the same setup except the boring crypto and authorisation stuff, the fact that is not GCE opinionated, and directly using docker without CRI.
+This tutorial is a derivative of Kubernetes the hard way from the excellent Kelsey Hightower. This is pretty the same setup except the boring crypto and authorisation stuff, to be agnostic to the underlying platform (non GCE specific), and directly using docker without CRI.
 
 > The results of this tutorial should not be viewed as production ready ! but it can help you how to quickly setup a fully functional *but unsecure* cluster for educational purpose.
 
@@ -23,14 +23,14 @@ Kubernetes The Quick and Dirty Way guides you through bootstrapping a highly ava
 
 This tutorial assumes you have access to some kind of compute platform. AWS, GCE, Azure or your own private cloud should work.
 
-We need a least 6 amd64 nodes with a flat network and no firewall between them (and no antispoofing activated, think of it if you use AWS). We will use fixed private IP on each node. External access can be good to test our stuff end to end but not necessary.
+We need a least 6 amd64 nodes with a flat network and no firewall between them (and no antispoofing activated, think of it if you use AWS). We will use fixed private IP on each node. External access can be good to test our stuff end to end but not mandatory.
 
 
 ### Kubernetes Controllers
 
-You can use whatever linux distros you want. (I made this lab with centos7 because it is what we use in our production environment, but Ubuntu/Debian should also be OK)
+You can use whatever linux distribution you want. (I use Centos7 because it is what we use in our production environment, but Ubuntu/Debian should also be OK)
 
-Create three nodes which will host the Kubernetes control plane with some resources (1Vcpu, 4Go ram, some disk), and let say we name them :
+Create three nodes which will host the Kubernetes control plane with some resources (1 vcpu, 4Go ram, some disk), and let say we name and address them :
 
 - ctl1, 10.0.0.1
 - ctl2, 10.0.0.2
@@ -42,7 +42,7 @@ Each worker nodes requires a pod subnet allocation from the Kubernetes cluster C
 
 > The Kubernetes cluster CIDR range is defined by the Controller Manager's `--cluster-cidr` flag. In this tutorial the cluster CIDR range will be set to `10.200.0.0/16`, which supports 254 subnets.
 
-Create three nodes which will host the Kubernetes workers and give them a bit more resources (2Vcpu, 8G ram, some disk) and let say we name them :
+Create three nodes which will host the Kubernetes workers and give them a bit more resources (2 vcpu, 8G ram, some disk) and let say we name and address them :
 
 - wrk1, 10.0.0.11
 - wrk2, 10.0.0.12
@@ -52,17 +52,16 @@ Create three nodes which will host the Kubernetes workers and give them a bit mo
 
 # Bootstrapping the etcd Cluster
 
-Kubernetes components are stateless and store cluster state in [etcd](https://github.com/coreos/etcd). In this lab you will bootstrap a three nodes etcd cluster and configure it for high availability and *unsecure* remote access.
+Kubernetes components are stateless and store cluster state in [etcd](https://github.com/coreos/etcd). In this section you will bootstrap a three nodes etcd cluster and configure it for high availability and *unsecure* remote access.
 
 ## Prerequisites
 
-The commands in this lab must be run on each controller node: `ctrl1`, `ctrl2`, and `ctrl3`. Login to each controller node using ssh.
+The commands in this section must be run on each controller node: `ctrl1`, `ctrl2`, and `ctrl3`. Login to each controller node using ssh.
 
 ## Bootstrapping an etcd Cluster Member
 
 ### Download and Install the etcd Binaries
 
-(Install wget if not already installed.)
 Download the official etcd release binaries from the [coreos/etcd](https://github.com/coreos/etcd) GitHub project:
 
 ```
@@ -85,7 +84,7 @@ sudo mv etcd-v3.2.11-linux-amd64/etcd* /usr/local/bin/
 sudo mkdir -p /etc/etcd /var/lib/etcd
 ```
 
-Each etcd member must have a unique name within an etcd cluster. Set the etcd name to match the hostname of the current node and its private IP :
+Each etcd member must have a unique name within an etcd cluster. Set the etcd name to match the hostname and private internal ip of the current node:
 
 ```
 ETCD_NAME=$(hostname -s)
@@ -139,7 +138,7 @@ sudo systemctl start etcd
 
 ## Verification
 
-List the etcd cluster members (on any controller vm):
+List the etcd cluster members (on any controller node):
 
 ```
 ETCDCTL_API=3 etcdctl member list
@@ -154,13 +153,14 @@ c3714509dde986c4, started, ctl3, http://10.0.0.3:2380, http://10.0.0.3:2379
 ```
 
 ---
+
 # Bootstrapping the Kubernetes Control Plane
 
 In this section you will bootstrap the Kubernetes control plane across three nodes and configure it for high availability. The following components will be installed on each node: Kubernetes API Server, Scheduler, and Controller Manager.
 
 ## Prerequisites
 
-The commands in this lab must be run on each controller instance: `ctl1`, `ctl2`, and `ctl3`. Login to each controller instance using ssh.
+The commands in this section must be run on each controller instance: `ctl1`, `ctl2`, and `ctl3`. Login to each controller instance using ssh.
 
 ## Provision the Kubernetes Control Plane
 
@@ -312,31 +312,77 @@ etcd-1               Healthy   {"health": "true"}
 
 
 ---
+
 # Bootstrapping the Kubernetes Worker Nodes
 
-In this lab you will bootstrap three Kubernetes worker nodes. The following components will be installed on each node: [runc](https://github.com/opencontainers/runc), [container networking plugins](https://github.com/containernetworking/cni),  [kubelet](https://kubernetes.io/docs/admin/kubelet), and [kube-proxy](https://kubernetes.io/docs/concepts/cluster-administration/proxies).
+In this section you will bootstrap three Kubernetes worker nodes. The following components will be installed on each node: Nginx, Docker, [container networking plugins](https://github.com/containernetworking/cni),  [kubelet](https://kubernetes.io/docs/admin/kubelet), and [kube-proxy](https://kubernetes.io/docs/concepts/cluster-administration/proxies).
 
 ## Prerequisites
 
-The commands in this lab must be run on each worker vm: `wrk1`, `wrk2`, and `wrk3`.
+The commands in this section must be run on each worker vm: `wrk1`, `wrk2`, and `wrk3`.
 
 ## Provisioning a Kubernetes Worker Node
+
+### Prerequesite
 
 Ensure that bridge-netfilter module is loaded and enabled. (if not service will not work correctly and cni do not enable it by default)
 
 ```
 sudo modprobe bridge-netfilter
-sudo sysctl net.bridge.bridge-nf-call-iptables = 1
+sudo sysctl net.bridge.bridge-nf-call-iptables=1
 ```
 
-Make it persistent the way your distro want.
+Make it persistent the way your distribution want.
 
 Install the OS dependencies (socat).
 
 > The socat binary enables support for the `kubectl port-forward` command.
 
-Install docker following the docker site instructions for your distro.
-At time writing this is docker-ce-17.12.0. This should be ok.
+### Install and configure nginx 
+
+In our setup we use nginx as an internal load balancer on the worker itself for ensuring high avaibility connectivity to the master nodes.
+
+Install a recent nginx with stream support the way you want. Update his config:
+
+
+```
+cat > nginx.conf <<EOF
+worker_processes  1;
+
+error_log /var/log/nginx/error.log;
+pid /run/nginx.pid;
+
+events {
+  worker_connections  1024;
+}
+
+stream {
+  upstream apiservers {
+    server 172.31.12.181:8080;
+    server 172.31.9.173:8080;
+    server 172.31.9.151:8080;
+  }
+
+  server {
+    listen 8080;
+    proxy_pass apiservers;
+  }
+}
+EOF
+```
+
+```
+sudo mv nginx.conf /etc/nginx/nginx.conf
+```
+
+```
+sudo systemctl restart nginx
+```
+
+### Install docker
+
+Install docker following the docker site instructions for your distribution.
+At time writing this is docker-ce-17.12.0. This should be OK.
 
 We need to modify the docker.service in order to work with Kubernetes:
 
@@ -345,8 +391,6 @@ cat > docker.service <<EOF
 [Unit]
 Description=Docker Application Container Engine
 Documentation=https://docs.docker.com
-After=network-online.target firewalld.service
-Wants=network-online.target
 
 [Service]
 Type=notify
@@ -355,12 +399,9 @@ LimitNOFILE=infinity
 LimitNPROC=infinity
 LimitCORE=infinity
 TasksMax=infinity
-TimeoutStartSec=0
 Delegate=yes
 KillMode=process
 Restart=on-failure
-StartLimitBurst=3
-StartLimitInterval=60s
 
 [Install]
 WantedBy=multi-user.target
@@ -406,7 +447,7 @@ sudo mv kubectl kube-proxy kubelet /usr/local/bin/
 
 ### Configure CNI Networking
 
-We choose an arbitrary Pod CIDR range for the each worker node. For this lab we use static allocation.
+We choose an arbitrary Pod CIDR range for the each worker node. For this lab we use static allocation for each worker node.
 
 - wrk1 : 10.200.10.0/24
 - wrk2 : 10.200.20.0/24
@@ -456,7 +497,7 @@ cat > kube.config <<EOF
 apiVersion: v1
 clusters:
 - cluster:
-    server: http://${MASTER_IP}:8080
+    server: http://127.0.0.1:8080
   name: kubernetes
 contexts:
 - context:
@@ -496,7 +537,6 @@ ExecStart=/usr/local/bin/kubelet \\
   --network-plugin=cni \\
   --pod-cidr=${POD_CIDR} \\
   --register-node=true \\
-  --runtime-request-timeout=15m \\
   --v=2
 Restart=on-failure
 RestartSec=5
@@ -570,11 +610,12 @@ wrk3      Ready     <none>    13s       v1.9.0    <none>        CentOS Linux 7 (
 ```
 
 ---
+
 # Provisioning Pod Network Routes
 
 Pods scheduled to a node receive an IP address from the node's Pod CIDR range. At this point pods can not communicate with other pods running on different nodes due to missing network.
 
-In this lab you will create a route for each worker node that maps the node's Pod CIDR range to the node's internal IP address, aka static networking mode.
+In this section you will create a route for each worker node that maps the node's Pod CIDR range to the node's internal IP address, aka static networking mode.
 
 > There are [other ways](https://kubernetes.io/docs/concepts/cluster-administration/networking/#how-to-achieve-this) to implement the Kubernetes networking model. Most common are using Flannel, Calico or Kube-router.
 
@@ -598,12 +639,14 @@ ip route add 10.200.20.0/24 via 10.0.0.12
 ip route add 10.200.30.0/24 via 10.0.0.13
 ```
 
-> You can make these persistent, the method depend on your chosen distro.
+> You should make these persistent, the method depend on your distribution.
+
 
 ---
+
 # Deploying the DNS Cluster Add-on
 
-In this lab you will deploy the [DNS add-on](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/) which provides DNS based service discovery to applications running inside the Kubernetes cluster.
+In this section you will deploy the [DNS add-on](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/) which provides DNS based service discovery to applications running inside the Kubernetes cluster.
 
 ## The DNS Cluster Add-on
 
@@ -678,9 +721,10 @@ Address 1: 10.32.0.1 kubernetes.default.svc.cluster.local
 ```
 
 ---
+
 # Smoke Test
 
-In this lab you will complete a series of tasks to ensure your Kubernetes cluster is functioning correctly.
+In this section you will complete a series of tasks to ensure your Kubernetes cluster is functioning correctly.
 
 
 ## Deployments
