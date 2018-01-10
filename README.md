@@ -1,6 +1,60 @@
+
+
+
+
 # Kubernetes The Quick and Dirty Way
 
 This tutorial is a derivative of Kubernetes the hard way from the excellent Kelsey Hightower. This is pretty the same setup except the boring crypto and authorisation stuff, agnostic to the underlying platform (non GCE specific), and directly using docker without CRI.
+
+Table of Contents
+=================
+
+  * [Kubernetes The Quick and Dirty Way](README.md#kubernetes-the-quick-and-dirty-way)
+      * [Target Audience](README.md#target-audience)
+      * [Cluster Details](README.md#cluster-details)
+   * [Prerequisites](README.md#prerequisites)
+         * [Kubernetes Controllers](README.md#kubernetes-controllers)
+         * [Kubernetes Workers](README.md#kubernetes-workers)
+   * [Bootstrapping the etcd Cluster](README.md#bootstrapping-the-etcd-cluster)
+      * [Prerequisites](README.md#prerequisites-1)
+      * [Bootstrapping an etcd Cluster Member](README.md#bootstrapping-an-etcd-cluster-member)
+         * [Download and Install the etcd Binaries](README.md#download-and-install-the-etcd-binaries)
+         * [Configure the etcd Server](README.md#configure-the-etcd-server)
+         * [Start the etcd Server](README.md#start-the-etcd-server)
+      * [Verification](README.md#verification)
+   * [Bootstrapping the Kubernetes Control Plane](README.md#bootstrapping-the-kubernetes-control-plane)
+      * [Prerequisites](README.md#prerequisites-2)
+      * [Provision the Kubernetes Control Plane](README.md#provision-the-kubernetes-control-plane)
+         * [Download and Install the Kubernetes Controller Binaries](README.md#download-and-install-the-kubernetes-controller-binaries)
+         * [Configure the Kubernetes API Server](README.md#configure-the-kubernetes-api-server)
+         * [Configure the Kubernetes Controller Manager](README.md#configure-the-kubernetes-controller-manager)
+         * [Configure the Kubernetes Scheduler](README.md#configure-the-kubernetes-scheduler)
+         * [Start the Controller Services](README.md#start-the-controller-services)
+         * [Verification](README.md#verification-1)
+   * [Bootstrapping the Kubernetes Worker Nodes](README.md#bootstrapping-the-kubernetes-worker-nodes)
+      * [Prerequisites](README.md#prerequisites-3)
+      * [Provisioning a Kubernetes Worker Node](README.md#provisioning-a-kubernetes-worker-node)
+         * [Prerequesite](README.md#prerequesite)
+         * [Install and configure nginx](README.md#install-and-configure-nginx)
+         * [Install docker](README.md#install-docker)
+         * [Download and Install Worker Binaries](README.md#download-and-install-worker-binaries)
+         * [Configure CNI Networking](README.md#configure-cni-networking)
+         * [Configure the Kubelet](README.md#configure-the-kubelet)
+         * [Configure the Kubernetes Proxy](README.md#configure-the-kubernetes-proxy)
+         * [Start the Worker Services](README.md#start-the-worker-services)
+      * [Verification](README.md#verification-2)
+   * [Provisioning Pod Network Routes](README.md#provisioning-pod-network-routes)
+      * [The Routing Table](README.md#the-routing-table)
+      * [Routes](README.md#routes)
+   * [Deploying the DNS Cluster Add-on](README.md#deploying-the-dns-cluster-add-on)
+      * [The DNS Cluster Add-on](README.md#the-dns-cluster-add-on)
+      * [Verification](README.md#verification-3)
+   * [Smoke Test](README.md#smoke-test)
+      * [Deployments](README.md#deployments)
+         * [Logs](README.md#logs)
+         * [Exec](README.md#exec)
+      * [Services](README.md#services)
+
 
 > The results of this tutorial should not be viewed as production ready ! but it can help you how to quickly setup a fully functional *but unsecure* cluster for educational purpose.
 
