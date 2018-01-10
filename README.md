@@ -20,10 +20,9 @@ Kubernetes The Quick and Dirty Way guides you through bootstrapping a highly ava
 ## Tables of contents
 
 * [Prerequisites](docs/01-prerequisites.md)
-* [Provisioning Compute Resources](docs/02-compute-resources.md)
-* [Bootstrapping the etcd Cluster](docs/03-bootstrapping-etcd.md)
-* [Bootstrapping the Kubernetes Control Plane](docs/04-bootstrapping-kubernetes-controllers.md)
-* [Bootstrapping the Kubernetes Worker Nodes](docs/05-bootstrapping-kubernetes-workers.md)
-* [Provisioning Pod Network Routes](docs/06-pod-network-routes.md)
-* [Deploying the DNS Cluster Add-on](docs/07-dns-addon.md)
-* [Smoke Test](docs/08-smoke-test.md)
+* [Bootstrapping the etcd Cluster](docs/02-bootstrapping-etcd.md)
+* [Bootstrapping the Kubernetes Control Plane](docs/03-bootstrapping-kubernetes-controllers.md)
+* [Bootstrapping the Kubernetes Worker Nodes](docs/04-bootstrapping-kubernetes-workers.md)
+* [Provisioning Pod Network Routes](docs/05-pod-network-routes.md)
+* [Deploying the DNS Cluster Add-on](docs/06-dns-addon.md)
+* [Smoke Test](docs/07-smoke-test.md)
