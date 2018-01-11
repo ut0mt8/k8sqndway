@@ -58,10 +58,14 @@ EOF
 
 ```
 sudo mv nginx.conf /etc/nginx/nginx.conf
+
+```
+sudo systemctl enable nginx
+```
 ```
 
 ```
-sudo systemctl restart nginx
+sudo systemctl start nginx
 ```
 
 ### Install docker
