@@ -7,7 +7,7 @@ In this section you will deploy the [DNS add-on](https://kubernetes.io/docs/conc
 Deploy the `kube-dns` cluster add-on (this is a simplified definition of kube-dns)
 
 ```
-kubectl create -f kube-dns.yaml
+kubectl create -f https://raw.githubusercontent.com/ut0mt8/k8sqndway/master/files/kube-dns.yaml
 ```
 
 > output
@@ -28,7 +28,6 @@ kubectl get pods -l k8s-app=kube-dns -n kube-system
 ```
 NAME                        READY     STATUS    RESTARTS   AGE
 kube-dns-3097350089-gq015   3/3       Running   0          20s
-kube-dns-3097350089-q64qc   3/3       Running   0          20s
 ```
 
 ## Verification
