@@ -10,7 +10,7 @@ The commands in this section must be run on each worker vm: `wrk1`, `wrk2`, and 
 
 ### Prerequesite
 
-Ensure that bridge-netfilter module is loaded and enabled. (if not service will not work correctly and cni do not enable it by default)
+Ensure that bridge-netfilter module is loaded and enabled. (if not service will not work correctly and cni does not enable it by default)
 
 ```
 sudo modprobe bridge-netfilter
@@ -25,9 +25,9 @@ Install the OS dependencies (socat).
 
 ### Install and configure nginx 
 
-In our setup we use nginx as an internal load balancer on the worker itself for ensuring high avaibility connectivity to the master nodes.
+In our setup we use nginx as an internal load balancer on the worker itself to ensure high avaibility connectivity to the master nodes.
 
-Install a recent nginx with stream support the way you want. Update his config:
+Install a recent nginx with stream support the way you want. Update its config:
 
 
 ```

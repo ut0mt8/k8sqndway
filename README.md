@@ -1,7 +1,7 @@
 
 # Kubernetes The Quick and Dirty Way
 
-This tutorial is a derivative of Kubernetes the hard way from the excellent Kelsey Hightower. This is pretty the same setup except the boring crypto and authorisation stuff, agnostic to the underlying platform (non GCE specific), and directly using docker without CRI.
+This tutorial is a derivative of Kubernetes the hard way from the excellent Kelsey Hightower. This is pretty much the same setup except the boring crypto and authorisation stuff, agnostic to the underlying platform (non GCE specific), and directly using docker without CRI.
 
 > The results of this tutorial should not be viewed as production ready ! but it can help you how to quickly setup a fully functional *but unsecure* cluster for educational purpose.
 
