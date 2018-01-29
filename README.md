@@ -27,4 +27,4 @@ Kubernetes The Quick and Dirty Way guides you through bootstrapping a highly ava
 * [Deploying the DNS Cluster Add-on](docs/06-dns-addon.md)
 * [Smoke Test](docs/07-smoke-test.md)
 
-* [Bonusi: Using Flannel for the Network](docs/08-xtra-pod-network-flannel.md)
+* [Bonus: Using Flannel for the Network](docs/08-xtra-pod-network-flannel.md)
