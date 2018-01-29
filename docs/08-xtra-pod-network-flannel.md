@@ -141,5 +141,39 @@ EOF
 Configure CNI for Flannel:
 
 
+```
+cat > /etc/cni/net.d/10-flannel.conf <<EOF
+{
+    "cniVersion": "0.3.1",
+    "name": "flannel",
+    "type": "flannel",
+    "delegate": {
+      "isDefaultGateway": true,
+      "ipMasq": true,
+    }
+}
+EOF
+```
+
+Start Flannel and kubelet:
+
+
+```
+systemctl start kubelet flannel
+```
+
+## Verification
+
+On each worker node the flannel daemon should start and create a environment file use by the CNI plugin:
+
+```
+cat /run/flannel/subnet.env
+FLANNEL_NETWORK=10.200.0.0/16
+FLANNEL_SUBNET=10.200.0.1/24
+FLANNEL_MTU=1500
+FLANNEL_IPMASQ=false
+```
+
+On one controller node we could check if worker nodes are correctly re-registered:
 
 
