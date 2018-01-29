@@ -176,4 +176,25 @@ FLANNEL_IPMASQ=false
 
 On one controller node we could check if worker nodes are correctly re-registered:
 
+```
+kubectl get nodes -o wide
+```
+
+> output
+
+```
+NAME      STATUS    ROLES     AGE       VERSION   EXTERNAL-IP   OS-IMAGE                KERNEL-VERSION              CONTAINER-RUNTIME
+wrk1      Ready     <none>    22s       v1.9.0    <none>        CentOS Linux 7 (Core)   3.10.0-693.5.2.el7.x86_64   docker://17.12.0-ce
+wrk2      Ready     <none>    25s       v1.9.0    <none>        CentOS Linux 7 (Core)   3.10.0-693.5.2.el7.x86_64   docker://17.12.0-ce
+wrk3      Ready     <none>    26s       v1.9.0    <none>        CentOS Linux 7 (Core)   3.10.0-693.5.2.el7.x86_64   docker://17.12.0-ce
+```
+
+We could also check if worker have a correctly assigned pod CIDR:
+
+```
+kubectl get node wrk1 -o jsonpath='{.spec.podCIDR}'
+10.200.0.0/24
+```
+
+Finally if all is correct we could re-run the smoke test.
 
