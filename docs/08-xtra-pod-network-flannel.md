@@ -168,6 +168,11 @@ On each worker node the flannel daemon should start and create a environment fil
 
 ```
 cat /run/flannel/subnet.env
+```
+
+> output
+
+```
 FLANNEL_NETWORK=10.200.0.0/16
 FLANNEL_SUBNET=10.200.0.1/24
 FLANNEL_MTU=1500
