@@ -22,6 +22,7 @@ ip route del 10.200.30.0/24 via 10.0.0.13
 
 Remove the CNI bridge configuration (as we will use a new one with flannel).
 
+
 ```
 rm /etc/cni/net.d/10-bridge.conf
 ```
@@ -41,11 +42,12 @@ kubectl delete node wrk2
 kubectl delete node wrk3
 ```
 
+Remove the '--pod-cidr=${POD_CIDR}' option from the kubelet.service file on each worker node.
+
 
 ## Configure control plane for auto node CIDR assignation
 
 On each controller node replace the unit file of kube-controller-manager with:
-
 
 ```
 cat > /etc/systemd/system/multi-user.target.wants/kube-controller-manager.service <<EOF
@@ -95,7 +97,7 @@ wget https://github.com/coreos/flannel/releases/download/v0.8.0/flanneld-amd64
 Install the flannel binary:
 
 ```
-chmod +x flanneld-amd64 && mv flanneld-amd64 /usr/local/bin/
+chmod +x flanneld-amd64 && mv flanneld-amd64 /usr/local/bin/flannel
 ```
 
 Create the flannel.service systemd unit file:
