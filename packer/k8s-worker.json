@@ -1,0 +1,57 @@
+{
+    "description": "K8S Workers AMI.",
+    "min_packer_version": "0.11.0",
+    "variables": {
+        "aws_access_key": "",
+        "aws_secret_key": "",
+        "aws_region": "eu-central-1",
+        "ssh_username": "centos"
+    },
+    "builders": [
+        {
+            "type": "amazon-ebs",
+            "access_key": "{{user `aws_access_key`}}",
+            "secret_key": "{{user `aws_secret_key`}}",
+            "ami_name": "K8S-WRK-{{isotime \"20060102-1504\"}}",
+	    "ami_description": "K8S Worker Node {{isotime \"20060102-1504\"}}",
+            "instance_type": "t2.medium",
+            "region": "{{user `aws_region`}}",
+            "source_ami_filter": {
+                "filters": {
+                    "owner-alias": "aws-marketplace",
+                    "name": "*CentOS Linux 7*",
+                    "virtualization-type": "hvm"
+                },
+                "most_recent": true
+            },
+            "ami_virtualization_type": "hvm",
+            "ssh_username": "{{user `ssh_username`}}",
+            "associate_public_ip_address": true,
+            "tags": {
+                "Name": "K8S-WORKER",
+                "Env": "K8S",
+                "OS": "CentOS",
+                "OSVER": "7"
+            },
+            "ami_block_device_mappings": [
+                {
+                    "device_name": "/dev/sda1",
+                    "volume_type": "gp2",
+                    "volume_size": 80
+                }
+            ]
+        }
+    ],
+    "provisioners": [
+      {
+        "type": "file",
+        "source": "files/",
+        "destination": "/tmp/"
+      },
+      {
+        "type": "shell",
+        "script": "init-script.sh"
+      }
+    ]
+}
+

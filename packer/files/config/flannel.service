@@ -1,0 +1,15 @@
+[Unit]
+Description=Flannel
+After=nginx.service
+Requires=kubelet.service
+
+[Service]
+ExecStartPre=/bin/bash -c "systemctl set-environment NODE_NAME=$(hostname)"
+ExecStart=/usr/local/bin/flannel \
+  -kube-api-url http://localhost:8080 \
+  -kube-subnet-mgr
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

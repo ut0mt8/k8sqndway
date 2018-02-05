@@ -1,0 +1,6 @@
+{
+ "Network": "10.200.0.0/16",
+ "Backend": {
+  "Type": "host-gw"
+ }
+}

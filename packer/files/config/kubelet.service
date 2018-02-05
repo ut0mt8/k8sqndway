@@ -1,0 +1,22 @@
+[Unit]
+Description=Kubernetes Kubelet
+Documentation=https://github.com/kubernetes/kubernetes
+After=docker.service
+Requires=docker.service
+
+[Service]
+ExecStart=/usr/local/bin/kubelet \
+  --allow-privileged=true \
+  --authorization-mode=AlwaysAllow \
+  --cloud-provider= \
+  --cluster-dns=10.32.0.10 \
+  --cluster-domain=cluster.local \
+  --kubeconfig=/var/lib/kubelet/kubeconfig \
+  --network-plugin=cni \
+  --register-node=true \
+  --v=2
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
