@@ -149,7 +149,7 @@ cat > /etc/cni/net.d/10-flannel.conf <<EOF
     "type": "flannel",
     "delegate": {
       "isDefaultGateway": true,
-      "ipMasq": true,
+      "ipMasq": true
     }
 }
 EOF
