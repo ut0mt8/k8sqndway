@@ -13,7 +13,7 @@ The commands in this section must be run on each worker vm: `wrk1`, `wrk2`, and 
 Ensure that bridge-netfilter module is loaded and enabled. (if not service will not work correctly and cni does not enable it by default)
 
 ```
-sudo modprobe bridge-netfilter
+sudo modprobe br_netfilter
 sudo sysctl net.bridge.bridge-nf-call-iptables=1
 ```
 
