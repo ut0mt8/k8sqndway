@@ -5,6 +5,10 @@ echo "PROVISIONNING..."
 # Ensure selinux is disabled
 sudo cp -f /tmp/config/selinux /etc/sysconfig/selinux
 
+# Ensure br_netfilter is loaded at startup
+sudo cp -f /tmp/config/br_netfilter.modules /etc/sysconfig/modules
+sudo chmod +x /etc/sysconfig/modules/br_netfilter.modules
+
 # Ensure net.bridge.bridge-nf-call-iptables=1
 sudo cp -f /tmp/config/10-bridge-netfilter.conf /etc/sysctl.d/
 
@@ -65,8 +69,8 @@ sudo cp -f /tmp/config/net-conf.json /etc/kube-flannel/
 # Enable service
 sudo mv /tmp/config/*.service /etc/systemd/system/
 sudo systemctl daemon-reload
-sudo systemctl enable docker kubelet kube-proxy flannel
-sudo systemctl start docker kubelet kube-proxy flannel
+sudo systemctl enable docker flannel kubelet kube-proxy 
+sudo systemctl start docker flannel kubelet kube-proxy
 
 # Clean up /tmp
 sudo rm -rf /tmp/*
