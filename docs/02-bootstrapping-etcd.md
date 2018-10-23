@@ -82,7 +82,7 @@ sudo systemctl enable etcd
 sudo systemctl start etcd
 ```
 
-> Remember to run the above commands on each controller vm: `ctl1`, `ctl2`, and `ctl3`.
+> Remember to run the above commands on each controller vm: `ctrl1`, `ctrl2`, and `ctrl3`.
 
 ## Verification
 
@@ -95,8 +95,8 @@ ETCDCTL_API=3 etcdctl member list
 > output
 
 ```
-885d39f23735e385, started, ctl2, http://10.0.0.2:2380, http://10.0.0.2:2379
-9c41b374fd2f0a23, started, ctl1, http://10.0.0.1:2380, http://10.0.0.1:2379
-c3714509dde986c4, started, ctl3, http://10.0.0.3:2380, http://10.0.0.3:2379
+885d39f23735e385, started, ctrl2, http://10.0.0.2:2380, http://10.0.0.2:2379
+9c41b374fd2f0a23, started, ctrl1, http://10.0.0.1:2380, http://10.0.0.1:2379
+c3714509dde986c4, started, ctrl3, http://10.0.0.3:2380, http://10.0.0.3:2379
 ```
 
