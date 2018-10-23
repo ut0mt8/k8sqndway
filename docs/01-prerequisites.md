@@ -11,9 +11,9 @@ You can use whatever linux distribution you want. (I use Centos7 because it is w
 
 Create three nodes which will host the Kubernetes control plane with some resources (1 vcpu, 4Go ram, some disk), and let say we name and address them :
 
-- ctl1, 10.0.0.1
-- ctl2, 10.0.0.2
-- ctl3, 10.0.0.3
+- ctrl1, 10.0.0.1
+- ctri2, 10.0.0.2
+- ctrl3, 10.0.0.3
 
 ### Kubernetes Workers
 

@@ -4,7 +4,7 @@ In this section you will bootstrap the Kubernetes control plane across three nod
 
 ## Prerequisites
 
-The commands in this section must be run on each controller instance: `ctl1`, `ctl2`, and `ctl3`. Login to each controller instance using ssh.
+The commands in this section must be run on each controller instance: `ctrl1`, `ctrl2`, and `ctrl3`. Login to each controller instance using ssh.
 
 ## Provision the Kubernetes Control Plane
 
@@ -152,5 +152,5 @@ etcd-0               Healthy   {"health": "true"}
 etcd-1               Healthy   {"health": "true"}
 ```
 
-> Remember to run the above commands on each controller node: `ctl1`, `ctl2`, and `clt3`.
+> Remember to run the above commands on each controller node: `ctrl1`, `ctrl2`, and `ctrl3`.
 
