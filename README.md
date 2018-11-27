@@ -13,9 +13,9 @@ As the original the target audience for this tutorial is someone planning to sup
 
 Kubernetes The Quick and Dirty Way guides you through bootstrapping a highly available Kubernetes cluster with *no* encryption between components and *no* authentication.
 
-* [Kubernetes](https://github.com/kubernetes/kubernetes) 1.9.0
+* [Kubernetes](https://github.com/kubernetes/kubernetes) 1.12.0
 * [CNI Container Networking](https://github.com/containernetworking/cni) 0.6.0
-* [etcd](https://github.com/coreos/etcd) 3.2.11
+* [etcd](https://github.com/coreos/etcd) 3.3.9
 
 ## Tables of contents
 

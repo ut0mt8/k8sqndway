@@ -11,9 +11,9 @@ You can use whatever linux distribution you want. (I use Centos7 because it is w
 
 Create three nodes which will host the Kubernetes control plane with some resources (1 vcpu, 4Go ram, some disk), and let say we name and address them :
 
-- ctrl1, 10.0.0.1
-- ctri2, 10.0.0.2
-- ctrl3, 10.0.0.3
+- ctrl00, 10.42.0.1
+- ctri01, 10.42.0.2
+- ctrl02, 10.42.0.3
 
 ### Kubernetes Workers
 
@@ -23,7 +23,7 @@ Each worker nodes requires a pod subnet allocation from the Kubernetes cluster C
 
 Create three nodes which will host the Kubernetes workers and give them a bit more resources (2 vcpu, 8G ram, some disk) and let say we name and address them :
 
-- wrk1, 10.0.0.11
-- wrk2, 10.0.0.12
-- wrk3, 10.0.0.13
+- wrk00, 10.42.0.11
+- wrk01, 10.42.0.12
+- wrk02, 10.42.0.13
 

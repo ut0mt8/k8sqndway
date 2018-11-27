@@ -4,7 +4,7 @@ Kubernetes components are stateless and store cluster state in [etcd](https://gi
 
 ## Prerequisites
 
-The commands in this section must be run on each controller node: `ctrl1`, `ctrl2`, and `ctrl3`. Login to each controller node using ssh.
+The commands in this section must be run on each controller node: `ctrl00`, `ctrl01`, and `ctrl02`. Login to each controller node using ssh.
 
 ## Bootstrapping an etcd Cluster Member
 
@@ -13,17 +13,17 @@ The commands in this section must be run on each controller node: `ctrl1`, `ctrl
 Download the official etcd release binaries from the [coreos/etcd](https://github.com/coreos/etcd) GitHub project:
 
 ```
-wget "https://github.com/coreos/etcd/releases/download/v3.2.11/etcd-v3.2.11-linux-amd64.tar.gz"
+wget "https://github.com/coreos/etcd/releases/download/v3.3.9/etcd-v3.3.9-linux-amd64.tar.gz"
 ```
 
 Extract and install the `etcd` server and the `etcdctl` command line utility:
 
 ```
-tar -xvf etcd-v3.2.11-linux-amd64.tar.gz
+tar -xvf etcd-v3.3.9-linux-amd64.tar.gz
 ```
 
 ```
-sudo mv etcd-v3.2.11-linux-amd64/etcd* /usr/local/bin/
+sudo mv etcd-v3.3.9-linux-amd64/etcd* /usr/local/bin/
 ```
 
 ### Configure the etcd Server
@@ -53,7 +53,7 @@ ExecStart=/usr/local/bin/etcd \\
   --listen-peer-urls http://${INTERNAL_IP}:2380 \\
   --listen-client-urls http://${INTERNAL_IP}:2379,http://127.0.0.1:2379 \\
   --advertise-client-urls http://${INTERNAL_IP}:2379 \\
-  --initial-cluster ctrl1=http://10.0.0.1:2380,ctrl2=http://10.0.0.2:2380,ctrl3=http://10.0.0.3:2380 \\
+  --initial-cluster ctrl00=http://10.42.0.1:2380,ctrl01=http://10.42.0.2:2380,ctrl02=http://10.42.0.3:2380 \\
   --initial-cluster-state new \\
   --data-dir=/var/lib/etcd
 Restart=on-failure
@@ -82,7 +82,7 @@ sudo systemctl enable etcd
 sudo systemctl start etcd
 ```
 
-> Remember to run the above commands on each controller vm: `ctrl1`, `ctrl2`, and `ctrl3`.
+> Remember to run the above commands on each controller vm: `ctrl00`, `ctrl01`, and `ctrl02`.
 
 ## Verification
 
@@ -95,8 +95,8 @@ ETCDCTL_API=3 etcdctl member list
 > output
 
 ```
-885d39f23735e385, started, ctrl2, http://10.0.0.2:2380, http://10.0.0.2:2379
-9c41b374fd2f0a23, started, ctrl1, http://10.0.0.1:2380, http://10.0.0.1:2379
-c3714509dde986c4, started, ctrl3, http://10.0.0.3:2380, http://10.0.0.3:2379
+885d39f23735e385, started, ctrl01, http://10.42.0.2:2380, http://10.42.0.2:2379
+9c41b374fd2f0a23, started, ctrl00, http://10.42.0.1:2380, http://10.42.0.1:2379
+c3714509dde986c4, started, ctrl02, http://10.42.0.3:2380, http://10.42.0.3:2379
 ```
 

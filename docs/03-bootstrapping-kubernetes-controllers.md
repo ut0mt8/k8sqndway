@@ -4,7 +4,7 @@ In this section you will bootstrap the Kubernetes control plane across three nod
 
 ## Prerequisites
 
-The commands in this section must be run on each controller instance: `ctrl1`, `ctrl2`, and `ctrl3`. Login to each controller instance using ssh.
+The commands in this section must be run on each controller instance: `ctrl00`, `ctrl01`, and `ctrl02`. Login to each controller instance using ssh.
 
 ## Provision the Kubernetes Control Plane
 
@@ -13,10 +13,10 @@ The commands in this section must be run on each controller instance: `ctrl1`, `
 Download the official Kubernetes release binaries:
 
 ```
-wget "https://storage.googleapis.com/kubernetes-release/release/v1.9.0/bin/linux/amd64/kube-apiserver" \
-  "https://storage.googleapis.com/kubernetes-release/release/v1.9.0/bin/linux/amd64/kube-controller-manager" \
-  "https://storage.googleapis.com/kubernetes-release/release/v1.9.0/bin/linux/amd64/kube-scheduler" \
-  "https://storage.googleapis.com/kubernetes-release/release/v1.9.0/bin/linux/amd64/kubectl"
+wget "https://storage.googleapis.com/kubernetes-release/release/v1.12.0/bin/linux/amd64/kube-apiserver" \
+  "https://storage.googleapis.com/kubernetes-release/release/v1.12.0/bin/linux/amd64/kube-controller-manager" \
+  "https://storage.googleapis.com/kubernetes-release/release/v1.12.0/bin/linux/amd64/kube-scheduler" \
+  "https://storage.googleapis.com/kubernetes-release/release/v1.12.0/bin/linux/amd64/kubectl"
 ```
 
 Install the Kubernetes binaries:
@@ -53,7 +53,7 @@ ExecStart=/usr/local/bin/kube-apiserver \\
   --apiserver-count=3 \\
   --authorization-mode=AlwaysAllow \\
   --bind-address=0.0.0.0 \\
-  --etcd-servers=http://10.0.0.1:2379,http://10.0.0.2:2379,http://10.0.0.3:2379 \\
+  --etcd-servers=http://10.42.0.1:2379,http://10.42.0.2:2379,http://10.42.0.3:2379 \\
   --insecure-bind-address=0.0.0.0 \\
   --runtime-config=api/all \\
   --service-cluster-ip-range=10.32.0.0/24 \\
@@ -152,5 +152,5 @@ etcd-0               Healthy   {"health": "true"}
 etcd-1               Healthy   {"health": "true"}
 ```
 
-> Remember to run the above commands on each controller node: `ctrl1`, `ctrl2`, and `ctrl3`.
+> Remember to run the above commands on each controller node: `ctrl00`, `ctrl01`, and `ctrl02`.
 
