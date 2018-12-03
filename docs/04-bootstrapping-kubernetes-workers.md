@@ -4,7 +4,7 @@ In this section you will bootstrap three Kubernetes worker nodes. The following 
 
 ## Prerequisites
 
-The commands in this section must be run on each worker vm: `wrk1`, `wrk2`, and `wrk3`.
+The commands in this section must be run on each worker vm: `wrk00`, `wrk01`, and `wrk02`.
 
 ## Provisioning a Kubernetes Worker Node
 
@@ -71,7 +71,7 @@ sudo systemctl start nginx
 ### Install docker
 
 Install docker following the docker site instructions for your distribution.
-At time writing this is docker-ce-17.12.0. This should be OK.
+At time writing this is docker-ce-18.09.0. This should be OK.
 
 We need to modify the docker.service in order to work with Kubernetes:
 
@@ -102,9 +102,9 @@ EOF
 
 ```
 wget https://github.com/containernetworking/plugins/releases/download/v0.6.0/cni-plugins-amd64-v0.6.0.tgz \
-  https://storage.googleapis.com/kubernetes-release/release/v1.9.0/bin/linux/amd64/kubectl \
-  https://storage.googleapis.com/kubernetes-release/release/v1.9.0/bin/linux/amd64/kube-proxy \
-  https://storage.googleapis.com/kubernetes-release/release/v1.9.0/bin/linux/amd64/kubelet
+  https://storage.googleapis.com/kubernetes-release/release/v1.12.0/bin/linux/amd64/kubectl \
+  https://storage.googleapis.com/kubernetes-release/release/v1.12.0/bin/linux/amd64/kube-proxy \
+  https://storage.googleapis.com/kubernetes-release/release/v1.12.0/bin/linux/amd64/kubelet
 
 ```
 
@@ -138,9 +138,9 @@ sudo mv kubectl kube-proxy kubelet /usr/local/bin/
 
 We choose an arbitrary Pod CIDR range for the each worker node. For this lab we use static allocation for each worker node.
 
-- wrk1 : 10.200.10.0/24
-- wrk2 : 10.200.20.0/24
-- wrk3 : 10.200.30.0/24
+- wrk00 : 10.200.10.0/24
+- wrk01 : 10.200.20.0/24
+- wrk02 : 10.200.30.0/24
 
 Create the `bridge` network configuration file and replace POD_CIDR with the correct value for the current worker node:
 
@@ -277,7 +277,7 @@ sudo systemctl enable docker kubelet kube-proxy
 sudo systemctl start docker kubelet kube-proxy
 ```
 
-> Remember to run the above commands on each worker node: `wrk1`, `wrk2`, and `wrk3`.
+> Remember to run the above commands on each worker node: `wrk00`, `wrk01`, and `wrk02`.
 
 ## Verification
 
@@ -293,7 +293,7 @@ kubectl get nodes -o wide
 
 ```
 NAME      STATUS    ROLES     AGE       VERSION   EXTERNAL-IP   OS-IMAGE                KERNEL-VERSION              CONTAINER-RUNTIME
-wrk1      Ready     <none>    12s       v1.9.0    <none>        CentOS Linux 7 (Core)   3.10.0-693.5.2.el7.x86_64   docker://17.12.0-ce
-wrk2      Ready     <none>    12s       v1.9.0    <none>        CentOS Linux 7 (Core)   3.10.0-693.5.2.el7.x86_64   docker://17.12.0-ce
-wrk3      Ready     <none>    13s       v1.9.0    <none>        CentOS Linux 7 (Core)   3.10.0-693.5.2.el7.x86_64   docker://17.12.0-ce
+wrk00     Ready     <none>    12s       v1.9.0    <none>        CentOS Linux 7 (Core)   3.10.0-693.5.2.el7.x86_64   docker://17.12.0-ce
+wrk01     Ready     <none>    12s       v1.9.0    <none>        CentOS Linux 7 (Core)   3.10.0-693.5.2.el7.x86_64   docker://17.12.0-ce
+wrk02     Ready     <none>    13s       v1.9.0    <none>        CentOS Linux 7 (Core)   3.10.0-693.5.2.el7.x86_64   docker://17.12.0-ce
 ```
