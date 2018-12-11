@@ -314,8 +314,8 @@ kubectl get nodes -o wide
 > output
 
 ```
-NAME      STATUS    ROLES     AGE       VERSION   EXTERNAL-IP   OS-IMAGE                KERNEL-VERSION              CONTAINER-RUNTIME
-wrk00     Ready     <none>    12s       v1.9.0    <none>        CentOS Linux 7 (Core)   3.10.0-693.5.2.el7.x86_64   docker://17.12.0-ce
-wrk01     Ready     <none>    12s       v1.9.0    <none>        CentOS Linux 7 (Core)   3.10.0-693.5.2.el7.x86_64   docker://17.12.0-ce
-wrk02     Ready     <none>    13s       v1.9.0    <none>        CentOS Linux 7 (Core)   3.10.0-693.5.2.el7.x86_64   docker://17.12.0-ce
+NAME      STATUS   ROLES    AGE   VERSION   INTERNAL-IP   EXTERNAL-IP   OS-IMAGE                       KERNEL-VERSION   CONTAINER-RUNTIME
+wrk00     Ready    <none>   16h   v1.13.0   10.42.0.11    <none>        Debian GNU/Linux 9 (stretch)   4.9.0-8-amd64    docker://18.9.0
+wrk01     Ready    <none>   16h   v1.13.0   10.42.0.12    <none>        Debian GNU/Linux 9 (stretch)   4.9.0-8-amd64    docker://18.9.0
+wrk02     Ready    <none>   16h   v1.13.0   10.42.0.13    <none>        Debian GNU/Linux 9 (stretch)   4.9.0-8-amd64    docker://18.9.0
 ```
