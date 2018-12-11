@@ -102,9 +102,9 @@ EOF
 
 ```
 wget https://github.com/containernetworking/plugins/releases/download/v0.6.0/cni-plugins-amd64-v0.6.0.tgz \
-  https://storage.googleapis.com/kubernetes-release/release/v1.12.0/bin/linux/amd64/kubectl \
-  https://storage.googleapis.com/kubernetes-release/release/v1.12.0/bin/linux/amd64/kube-proxy \
-  https://storage.googleapis.com/kubernetes-release/release/v1.12.0/bin/linux/amd64/kubelet
+  https://storage.googleapis.com/kubernetes-release/release/v1.13.0/bin/linux/amd64/kubectl \
+  https://storage.googleapis.com/kubernetes-release/release/v1.13.0/bin/linux/amd64/kube-proxy \
+  https://storage.googleapis.com/kubernetes-release/release/v1.13.0/bin/linux/amd64/kubelet
 
 ```
 
@@ -205,6 +205,33 @@ sudo mv kube.config /var/lib/kubelet/kubeconfig
 sudo cp /var/lib/kubelet/kubeconfig /var/lib/kube-proxy/kubeconfig
 ```
 
+Create the `kubelet-config` file :
+
+```
+cat > kubelet-config.yaml <<EOF
+kind: KubeletConfiguration
+apiVersion: kubelet.config.k8s.io/v1beta1
+authentication:
+  anonymous:
+    enabled: true
+  webhook:
+    enabled: true
+authorization:
+  mode: Webhook
+clusterDomain: "cluster.local"
+clusterDNS:
+  - "10.32.0.10"
+podCIDR: "10.200.10.0/24"
+resolvConf: "/etc/resolv.conf"
+runtimeRequestTimeout: "15m"
+EOF
+```
+
+```
+sudo mv kubelet-config.yaml /var/lib/kubelet/
+```
+
+
 Create the `kubelet.service` systemd unit file:
 
 ```
@@ -216,16 +243,11 @@ After=docker.service
 Requires=docker.service
 
 [Service]
-ExecStart=/usr/local/bin/kubelet \\
-  --allow-privileged=true \\
-  --authorization-mode=AlwaysAllow \\
-  --cloud-provider= \\
-  --cluster-dns=10.32.0.10 \\
-  --cluster-domain=cluster.local \\
-  --kubeconfig=/var/lib/kubelet/kubeconfig \\
-  --network-plugin=cni \\
-  --pod-cidr=${POD_CIDR} \\
-  --register-node=true \\
+ExecStart=/usr/local/bin/kubelet \
+  --config=/var/lib/kubelet/kubelet-config.yaml \
+  --kubeconfig=/var/lib/kubelet/kubeconfig \
+  --network-plugin=cni \
+  --register-node=true \
   --v=2
 Restart=on-failure
 RestartSec=5
