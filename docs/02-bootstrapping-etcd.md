@@ -47,14 +47,15 @@ Description=etcd
 Documentation=https://github.com/coreos
 
 [Service]
-ExecStart=/usr/local/bin/etcd \\
-  --name ${ETCD_NAME} \\
-  --initial-advertise-peer-urls http://${INTERNAL_IP}:2380 \\
-  --listen-peer-urls http://${INTERNAL_IP}:2380 \\
-  --listen-client-urls http://${INTERNAL_IP}:2379,http://127.0.0.1:2379 \\
-  --advertise-client-urls http://${INTERNAL_IP}:2379 \\
-  --initial-cluster ctrl00=http://10.42.0.1:2380,ctrl01=http://10.42.0.2:2380,ctrl02=http://10.42.0.3:2380 \\
-  --initial-cluster-state new \\
+EnvironmentFile=/etc/environment
+ExecStart=/usr/local/bin/etcd \
+  --name ${ETCD_NAME} \
+  --initial-advertise-peer-urls http://${NODE_IP}:2380 \
+  --listen-peer-urls http://${NODE_IP}:2380 \
+  --listen-client-urls http://${NODE_IP}:2379,http://127.0.0.1:2379 \
+  --advertise-client-urls http://${NODE_IP}:2379 \
+  --initial-cluster ctrl0=http://${CTRL0}:2380,ctrl1=http://${CTRL1}:2380,ctrl2=http://${CTRL2}:2380 \
+  --initial-cluster-state new \
   --data-dir=/var/lib/etcd
 Restart=on-failure
 RestartSec=5
